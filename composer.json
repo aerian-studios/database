@@ -1,0 +1,27 @@
+{
+  "name": "aerian/form-generator",
+  "description": "",
+  "keywords": [],
+  "homepage": "www.aerian.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Simon Neaves",
+      "email": "simon@aerian.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/config": "~5.2",
+    "illuminate/support": "~5.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Aerian\\FormGenerator\\": "src/Aerian/FormGenerator"
+    }
+  },
+  "minimum-stability": "dev"
+}
