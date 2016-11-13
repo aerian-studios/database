@@ -1,5 +1,5 @@
 {
-  "name": "aerian/form-generator",
+  "name": "aerian/database",
   "description": "",
   "keywords": [],
   "homepage": "www.aerian.com",
@@ -11,16 +11,14 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0",
-    "illuminate/config": "~5.2",
-    "illuminate/support": "~5.2"
+    "php": ">=5.4.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0"
   },
   "autoload": {
     "psr-4": {
-      "Aerian\\FormGenerator\\": "src/Aerian/FormGenerator"
+      "Aerian\\FormGenerator\\": "src/Aerian/Database"
     }
   },
   "minimum-stability": "dev"
