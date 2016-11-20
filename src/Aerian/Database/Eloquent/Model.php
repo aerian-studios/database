@@ -3,20 +3,22 @@
 namespace Aerian\Database\Eloquent;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Aerian\FormGenerator\HasFieldGenerator;
-use Aerian\FormGenerator\Generator;
-use Aerian\FormGenerator\FieldGenerator\EloquentModel as EloquentModelFieldGenerator;
+use Aerian\Blueprint\Adaptor\EloquentModel as BlueprintAdaptor;
 
-class Model extends EloquentModel implements HasFieldGenerator
+class Model extends EloquentModel
 {
-    public function getForm()
+
+    public function blueprint()
     {
-        return (new Generator($this))->generateForm($this);
+        return $this->getBlueprintAdaptor()->blueprint($this);
     }
 
-    public function getFieldGenerator()
+    /**
+     * @return BlueprintAdaptor
+     */
+    public function getBlueprintAdaptor()
     {
-        return app()->make(EloquentModelFieldGenerator::class);
+        return new BlueprintAdaptor($this);
     }
 
     /**
