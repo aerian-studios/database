@@ -19,6 +19,11 @@ class Model extends EloquentModel
      */
     protected $_listColumnsBlacklist = ['id', 'created_at', 'updated_at'];
 
+    /**
+     * doctrine column list
+     * @var \Doctrine\DBAL\Schema\Column[]
+     */
+    protected $_description;
 
     public function blueprint()
     {
@@ -34,15 +39,18 @@ class Model extends EloquentModel
     }
 
     /**
-     * @todo cache this to property
      * @return \Doctrine\DBAL\Schema\Column[]
      */
     public function describe()
     {
-        return $this
-            ->getConnection()
-            ->getDoctrineSchemaManager()
-            ->listTableColumns($this->getTable());
+        if (!isset($description)) {
+            $this->_description = $this
+                ->getConnection()
+                ->getDoctrineSchemaManager()
+                ->listTableColumns($this->getTable());
+        }
+        return $this->_description;
+    }
 
     /**
      * @return array
@@ -89,5 +97,7 @@ class Model extends EloquentModel
         $this->_listColumnsBlacklist = $listColumnsBlacklist;
         return $this;
     }
+
+
 
 }
