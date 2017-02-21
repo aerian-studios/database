@@ -11,13 +11,19 @@ class Model extends EloquentModel
      * the columns which should be included in a list view of this model, e.g. a REST index
      * @var array
      */
-    protected $_listColumns;
+    protected $_listColumnKeys;
 
     /**
      * columns to exclude when the default list columns are set
      * @var array
      */
-    protected $_listColumnsBlacklist = ['id', 'created_at', 'updated_at'];
+    protected $_listColumnKeysBlacklist = ['id', 'created_at', 'updated_at'];
+
+    /**
+     * an array of 'key' => 'label' pairs for column labels which need manual aliases
+     * @var array
+     */
+    protected $_columnLabelMap = [];
 
     /**
      * doctrine column list
@@ -55,49 +61,64 @@ class Model extends EloquentModel
     /**
      * @return array
      */
+    public function getListColumnKeys()
+    {
+        if (!isset($this->_listColumnKeys)) {
+            $this->_setDefaultListColumnKeys();
+        }
+        return $this->_listColumnKeys;
+    }
+
     public function getListColumns()
     {
-        if (!isset($this->_listColumns)) {
-            $this->_setDefaultListColumns();
+        $columns = [];
+        foreach ($this->getListColumnKeys() as $columnKey) {
+            $columns[$columnKey] = [
+                'key' => $columnKey,
+                'label' => $this->getLabelForColumnKey($columnKey),
+            ];
         }
-        return $this->_listColumns;
+        return $columns;
     }
 
     /**
      * @param mixed $listColumns
      * @return Model
      */
-    public function setListColumns($listColumns)
+    public function setListColumnKeys($listColumns)
     {
-        $this->_listColumns = $listColumns;
+        $this->_listColumnKeys = $listColumns;
         return $this;
     }
 
-    protected function _setDefaultListColumns()
+    protected function _setDefaultListColumnKeys()
     {
         $allColumns = array_keys($this->describe());
-        $columns = array_values(array_diff($allColumns, $this->getListColumnsBlacklist()));
-        $this->setListColumns($columns);
+        $columns = array_values(array_diff($allColumns, $this->getListColumnKeysBlacklist()));
+        $this->setListColumnKeys($columns);
     }
 
     /**
      * @return array
      */
-    public function getListColumnsBlacklist()
+    public function getListColumnKeysBlacklist()
     {
-        return $this->_listColumnsBlacklist;
+        return $this->_listColumnKeysBlacklist;
     }
 
     /**
      * @param array $listColumnsBlacklist
      * @return Model
      */
-    public function setListColumnsBlacklist($listColumnsBlacklist)
+    public function setListColumnKeysBlacklist($listColumnsBlacklist)
     {
-        $this->_listColumnsBlacklist = $listColumnsBlacklist;
+        $this->_listColumnKeysBlacklist = $listColumnsBlacklist;
         return $this;
     }
 
-
+    public function getLabelForColumnKey($columnKey)
+    {
+        return (in_array($columnKey, $this->_columnLabelMap)) ? $this->_columnLabelMap[$columnKey] : title_case($columnKey);
+    }
 
 }
